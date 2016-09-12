@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="pull-right">
+        <a href="{{ path('icon_new') }}" class="btn btn-default">
+            <i class="fa fa-plus" aria-hidden="true"></i>
+            Create a new entry
+        </a>
+    </div>
+    <h1>Icon list</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">List</h3>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for icon in icons %}
+                <tr>
+                    <td><a href="{{ path('icon_show', { 'id': icon.id }) }}">{{ icon.id }}</a></td>
+                    <td>{{ icon.title }}</td>
+                    <td>{{ icon.name }}</td>
+                    <td>
+                        <a href="{{ path('icon_show', { 'id': icon.id }) }}" class="btn btn-default">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            show
+                        </a>
+                        <a href="{{ path('icon_edit', { 'id': icon.id }) }}" class="btn btn-default">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            edit
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

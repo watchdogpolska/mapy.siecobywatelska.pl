@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="pull-right">
+        <a href="{{ path('icon_index') }}" class="btn btn-default">Back to the list</a>
+        <a href="{{ path('icon_edit', { 'id': icon.id }) }}" class="btn btn-default">
+            <i class="fa fa-pencil" aria-hidden="true"></i>
+            Edit
+        </a>
+        {{ form_start(delete_form, {attr:{style: 'display: inline-block' }}) }}
+            <input type="submit" value="Delete" class="btn btn-danger">
+        {{ form_end(delete_form) }}
+    </div>
+    <h1>Icon</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Info</h3>
+                </div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ icon.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Path</th>
+                            <td>{{ icon.path }}</td>
+                        </tr>
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ icon.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Mimetype</th>
+                            <td>{{ icon.mimeType }}</td>
+                        </tr>
+                        <tr>
+                            <th>Size</th>
+                            <td>{{ icon.size }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% include 'default/_table_history.html.twig' with {'obj': icon} %}
+        </div>
+    </div>
+{% endblock %}
