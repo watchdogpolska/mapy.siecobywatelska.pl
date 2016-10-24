@@ -421,4 +421,19 @@ class Point
     {
         return $this->attachments;
     }
+
+    public function setLatLng($latlng)
+    {
+        $this->setLat($latlng['lat']);
+        $this->setLng($latlng['lng']);
+        return $this;
+    }
+
+    public function getLatLng()
+    {
+        return array(
+            'lat' => $this->getLat(),
+            'lng' => $this->getLng()
+        );
+    }
 }

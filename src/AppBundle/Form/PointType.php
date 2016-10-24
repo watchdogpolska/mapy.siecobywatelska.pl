@@ -18,11 +18,12 @@ class PointType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('icon')
-            ->add('lat')
-            ->add('lng')
+            ->add('latlng', LatLngType::class, array(
+                'label' => 'Location'
+            ))
         ;
     }
-    
+
     /**
      * @param OptionsResolver $resolver
      */
