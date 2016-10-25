@@ -16,3 +16,5 @@ rest:
     resource: "@AppBundle/Controller/MapRestController.php"
     type: rest
     prefix: "api"
+    defaults:
+      _format: json

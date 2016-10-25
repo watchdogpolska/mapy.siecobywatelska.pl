@@ -8,49 +8,58 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Map;
-use AppBundle\Entity\MapRepository;
-use FOS\RestBundle\Context\Context;
-use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\Controller\FOSRestController;
 use JMS\Serializer\SerializationContext;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class MapRestController  extends FOSRestController
+/**
+ * Map controller.
+ *
+ * @Route("/api/maps")
+ */
+class MapRestController extends Controller
 {
     /**
-     * @Rest\View(serializerGroups={"detail"})
+     * Lists all Map entities.
+     *
+     * @Route("/", name="api_map_index")
+     * @Method("GET")
      */
-    public function getMapAction($map_slug)
+    public function indexAction()
     {
-        $repo = $this->getDoctrine()->getRepository(Map::class);
-        $data = $repo->findOneBy(array('slug' => $map_slug));
-        $view = $this->view($data, 200)
-//            ->setTemplate("MyBundle:Users:getUsers.html.twig")
-//            ->setTemplateVar('users');
-        ;
+        $context = SerializationContext::create()->setGroups(array('map.list', 'Default'));
 
-        return $this->handleView($view);
+        $em = $this->getDoctrine();
+        $maps = $em->getRepository(Map::class)->findAll();
+
+        return $this->json($maps, Response::HTTP_OK, array(), $context);
     }
 
     /**
+     * Detail obut Map entity.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @Rest\View(serializerGroups={"list"})
+     * @Route("/{slug}/", name="api_map_show")
+     * @Method("GET")
      */
-    public function getMapsAction()
+    public function detailAction($slug)
     {
-        $context = new Context();
-        $context->setVersion('1.0');
-//        $context->addGroup('list');
-        $data = $this->getDoctrine()->getRepository(Map::class)->findAll();
-        $view = $this->view($data, 200)
-                ->setContext($context)
-//            ->setTemplate("MyBundle:Users:getUsers.html.twig")
-//            ->setTemplateVar('users')
-        ;
+        $context = SerializationContext::create()->setGroups(array('map.detail', 'Default'));
 
-        return $this->handleView($view);
+        $em = $this->getDoctrine();
+        $map = $em->getRepository(Map::class)->findBySlug($slug);
+
+        return $this->json($map, Response::HTTP_OK, array(), $context);
     }
+
+
+    public function json($data, $status = 200, $headers = array(), $context = array())
+    {
+        $json = $this->get('serializer')->serialize($data, 'json', $context);
+        return new JsonResponse($json, $status, $headers, true);
+    }
+
 }

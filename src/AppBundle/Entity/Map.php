@@ -18,7 +18,6 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *     @ORM\Index(name="fk_map_fos_user2_idx", columns={"created_by"})
  * })
  * @ORM\Entity(repositoryClass="AppBundle\Entity\MapRepository")
- * @ExclusionPolicy("all")
  */
 class Map
 {
@@ -88,6 +87,7 @@ class Map
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Point", mappedBy="map")
      * @Serializer\Expose()
+     * @Serializer\Groups("map.detail")
      */
     private $points;
 

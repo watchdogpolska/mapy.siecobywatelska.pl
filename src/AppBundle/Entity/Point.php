@@ -17,7 +17,6 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *     @ORM\Index(name="fk_point_fos_user1_idx", columns={"created_by"}),
  *     @ORM\Index(name="fk_point_fos_user2_idx", columns={"modifited_by"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\PointRepository")
- * @ExclusionPolicy("all")
  */
 class Point
 {
@@ -36,7 +35,6 @@ class Point
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      * @Serializer\Expose()
-     * @Serializer\Groups({ "list", "detail" })
      */
     private $title;
 
@@ -44,8 +42,8 @@ class Point
      * @var string
      *
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
-     * @Serializer\Groups({ "detail" })
      * @Serializer\Expose()
+     * @Serializer\Groups({ "point.detail" })
      */
     private $description;
 
@@ -54,7 +52,6 @@ class Point
      *
      * @ORM\Column(name="lat", type="float", precision=10, scale=6, nullable=false)
      * @Serializer\Expose()
-     * @Serializer\Groups({ "list", "detail" })
      */
     private $lat;
 
@@ -63,14 +60,13 @@ class Point
      *
      * @ORM\Column(name="lng", type="float", precision=10, scale=6, nullable=false)
      * @Serializer\Expose()
-     * @Serializer\Groups({ "list", "detail" })
      */
     private $lng;
 
     /**
      * @var \AppBundle\Entity\Icon
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Icon")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Icon", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="icon_id", referencedColumnName="id")
      * })
@@ -86,6 +82,7 @@ class Point
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="map_id", referencedColumnName="id")
      * })
+     * @Serializer\Exclude()
      */
     private $map;
 
@@ -94,6 +91,7 @@ class Point
      *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @Serializer\Groups({ "point.detail" })
      */
     private $createdAt;
 
@@ -102,6 +100,7 @@ class Point
      *
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="modifited_at", type="datetime", nullable=false)
+     * @Serializer\Groups({ "point.detail" })
      */
     private $modifitedAt;
 
@@ -113,6 +112,7 @@ class Point
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      * })
+     * @Serializer\Groups({ "point.detail" })
      */
     private $createdBy;
 
@@ -124,13 +124,14 @@ class Point
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="modifited_by", referencedColumnName="id")
      * })
+     * @Serializer\Groups({ "point.detail" })
      */
     private $modifitedBy;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attachment", mappedBy="point")
      * @Serializer\Expose()
-     * @Serializer\Groups({ "detail" })
+     * @Serializer\Groups({ "point.detail" })
      */
     private $attachments;
 

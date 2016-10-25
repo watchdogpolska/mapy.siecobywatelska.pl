@@ -7,3 +7,9 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+  appbundle.serializer.map:
+      class: AppBundle\EventListener\SerializerEventSubscriber
+      arguments: ['@router']
+      tags:
+            - { name: jms_serializer.event_subscriber, class: AppBundle\Entity\Map }
