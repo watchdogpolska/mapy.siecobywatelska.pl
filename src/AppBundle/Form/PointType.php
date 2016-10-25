@@ -2,9 +2,11 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Icon;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class PointType extends AbstractType
 {
@@ -17,7 +19,13 @@ class PointType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('icon')
+            ->add('icon', Select2EntityType::class, [
+                'remote_route' => 'icon_select2_query',
+                'class' => Icon::class,
+                'placeholder' => 'Select a icon',
+                'autostart' => false,
+                'transformer' => EntityToPropertyWithImageTransformer::class
+            ])
             ->add('latlng', LatLngType::class, array(
                 'label' => 'Location'
             ))

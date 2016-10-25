@@ -12,4 +12,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class IconRepository extends EntityRepository
 {
+    public function search($q){
+        return $this->createQueryBuilder('node')
+            ->where('node.name LIKE :q OR node.title LIKE :q')
+            ->setParameter('q', '%' . $q . '%')->getQuery()->getResult();
+    }
 }

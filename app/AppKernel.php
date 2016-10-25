@@ -26,6 +26,8 @@ class AppKernel extends Kernel
             // REST
             new FOS\RestBundle\FOSRestBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
+
+            new Tetranz\Select2EntityBundle\TetranzSelect2EntityBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

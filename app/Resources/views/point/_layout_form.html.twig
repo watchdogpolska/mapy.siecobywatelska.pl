@@ -5,6 +5,29 @@
   <div id="{{ id }}_canvas" style="width: 100%; height: 300px;"></div>
 {% endblock %}
 
+{% block tetranz_select2entity_widget_select_option %}
+  <option
+    value="{{ id }}"
+    selected="selected"
+    data-img="{{ asset('/icons/' ~ data.name ) }}">
+    {{ label }}
+  </option>
+{% endblock %}
+
+{% block stylesheets %}
+  {{ parent() }}
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"
+    integrity="sha256-xJOZHfpxLR/uhh1BwYFS5fhmOAdIRQaiOul5F/b7v3s="
+    crossorigin="anonymous" />
+  <style>
+    .img-sm{
+      height: 1em;
+    }
+  </style>
+{% endblock %}
+
 {% block javascripts %}
   {{ parent() }}
   <script
@@ -48,5 +71,33 @@
 
       $('#point_latlng_canvas').locationpicker(options);
     })();
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js" integrity="sha256-+mWd/G69S4qtgPowSELIeVAv7+FuL871WXaolgXnrwQ=" crossorigin="anonymous"></script>
+  <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+  <script>
+    $.fn.select2entityAjax = function(action) {
+      var action = action || {};
+      var template = function (item) {
+        console.log({item});
+        var img = item.img || null;
+        if (!img) {
+          if (item.element && item.element.dataset.img) {
+            img = item.element.dataset.img;
+          } else {
+            return item.text;
+          }
+        }
+        console.log('<span><img src="' + img + '" class="img-circle img-sm"> ' + item.text + '</span>');
+        return $(
+          '<span><img src="' + img + '" class="img-circle img-sm"> ' + item.text + '</span>'
+        );
+      };
+      this.select2entity($.extend(action, {
+        templateResult: template,
+        templateSelection: template
+      }));
+      return this;
+    };
+    $('.select2entity').select2entityAjax();
   </script>
 {% endblock javascripts %}

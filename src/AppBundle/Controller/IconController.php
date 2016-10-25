@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Icon;
-use AppBundle\Form\IconType;
 
 /**
  * Icon controller.
@@ -124,6 +124,30 @@ class IconController extends Controller
         }
 
         return $this->redirectToRoute('icon_index');
+    }
+
+    /**
+     * Search a icon by `q` and result a json.
+     *
+     * @Route("/select2_query/", name="icon_select2_query")
+     * @Method("GET")
+     */
+    public function select2QueryAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $q = $request->query->get('q', '');
+
+        $icons = $em->getRepository(Icon::class)->search($q);
+        $icons = array_map(function(Icon $icon){
+            return array(
+                'id' => $icon->getId(),
+                'text' => $icon->getTitle(),
+                'img' => '/icons/' . $icon->getName()
+            );
+        }, $icons);
+
+        return new JsonResponse($icons);
     }
 
     /**
