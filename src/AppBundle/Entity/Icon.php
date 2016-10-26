@@ -55,6 +55,7 @@ class Icon
      *
      * @Gedmo\UploadableFileName
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Serializer\Expose()
      */
     private $name;
 

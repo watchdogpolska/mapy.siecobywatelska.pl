@@ -10,6 +10,6 @@ services:
 
   appbundle.serializer.map:
       class: AppBundle\EventListener\SerializerEventSubscriber
-      arguments: ['@router']
+      arguments: ['@router', '@request_stack']
       tags:
             - { name: jms_serializer.event_subscriber, class: AppBundle\Entity\Map }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ map.title }}</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+    <style>
+      html, body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+      }
+      .map-container{
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+</head>
+<body>
+  <div
+    data-sowp-map
+    data-sowp-map-url="{{ absolute_url(path('api_map_show', { slug: map.slug })) }}"
+    class="map-container"></div>
+  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+  <script src="{{ asset('share/sowp-map.js') }}"></script>
+</body>
+</html>

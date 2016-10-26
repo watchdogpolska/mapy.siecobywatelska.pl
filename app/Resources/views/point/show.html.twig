@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import "embed/macros.html.twig" as embed %}
 
 {% block body %}
     <div class="pull-right">
@@ -13,6 +14,8 @@
         {{ form_end(delete_form) }}
     </div>
     <h1>Point</h1>
+    {{ embed.iframe_point(point, {style: 'min-height: 300px; width: 100%; margin-bottom: 1em;'}) }}
+
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
@@ -98,4 +101,6 @@
             </tbody>
         </table>
     </div>
+
+    {{ include('point/_panel_embed.html.twig') }}
 {% endblock %}

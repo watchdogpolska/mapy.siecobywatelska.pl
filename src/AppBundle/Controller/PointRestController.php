@@ -28,7 +28,7 @@ class PointRestController extends Controller
         $context = SerializationContext::create()->setGroups(array('point.detail', 'Default'));
 
         $em = $this->getDoctrine();
-        $point = $em->getRepository(Point::class)->findAll();
+        $point = $em->getRepository(Point::class)->findOneById($id);
 
         return $this->json($point, Response::HTTP_OK, array(), $context);
     }

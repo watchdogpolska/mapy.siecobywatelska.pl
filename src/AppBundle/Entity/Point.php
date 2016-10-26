@@ -437,4 +437,9 @@ class Point
             'lng' => $this->getLng()
         );
     }
+
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 }

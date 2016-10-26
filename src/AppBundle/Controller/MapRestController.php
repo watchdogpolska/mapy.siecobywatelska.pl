@@ -50,7 +50,7 @@ class MapRestController extends Controller
         $context = SerializationContext::create()->setGroups(array('map.detail', 'Default'));
 
         $em = $this->getDoctrine();
-        $map = $em->getRepository(Map::class)->findBySlug($slug);
+        $map = $em->getRepository(Map::class)->findOneBySlug($slug);
 
         return $this->json($map, Response::HTTP_OK, array(), $context);
     }
