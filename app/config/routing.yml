@@ -13,7 +13,7 @@ fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
 rest:
-    resource: "@AppBundle/Controller/MapRestController.php"
+    resource: "@AppBundle/Controller/Rest/MapRestController.php"
     type: rest
     prefix: "api"
     defaults:

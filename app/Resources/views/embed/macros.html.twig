@@ -1,5 +1,5 @@
 {% macro iframe_map(map, attr) -%}
-<iframe src="{{ absolute_url(url('embed_map_slug', {slug: map.slug})) }}" frameborder="0"{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}></iframe>
+  <iframe src="{{ absolute_url(url('embed_map_slug', {slug: map.slug})) }}" frameborder="0"{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}></iframe>
 {% endmacro %}
 {% macro iframe_point(point, attr) -%}
     <iframe src="{{ absolute_url(url('embed_point_slug', {id: point.id})) }}" frameborder="0"{% for attrname, attrvalue in attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}></iframe>

@@ -6,7 +6,7 @@
  * Time: 00:47
  */
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Rest;
 
 use AppBundle\Entity\Map;
 use JMS\Serializer\SerializationContext;

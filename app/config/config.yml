@@ -80,6 +80,9 @@ stof_doctrine_extensions:
             uploadable: true
 
 fos_user:
+    from_email:
+        address:        no-reply@siecobywatelska.pl
+        sender_name:    Siecobywatelska.pl
     db_driver: orm
     firewall_name: main
     user_class: AppBundle\Entity\User

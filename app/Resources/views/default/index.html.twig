@@ -3,10 +3,16 @@
 {% block body %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Panel title</h3>
+            <h3 class="panel-title">Maps</h3>
         </div>
         <div class="panel-body">
-            Panel content
+          <ul>
+            {% for map in maps %}
+              <li>
+                <a href="{{ path('embed_map_slug', { 'slug': map.slug}) }}">{{ map.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
         </div>
     </div>
 {% endblock %}

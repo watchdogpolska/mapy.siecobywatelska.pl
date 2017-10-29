@@ -90,7 +90,6 @@ class Map
      * @Serializer\Groups("map.detail")
      */
     private $points;
-
     public function __construct() {
         $this->points = new ArrayCollection();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AppBundle\Controller\Rest;
 
 use AppBundle\Entity\Point;
 use JMS\Serializer\SerializationContext;

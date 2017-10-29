@@ -16,6 +16,9 @@
         width: 100%;
       }
     </style>
+    {% if not theme is none %}
+      <link rel="stylesheet" href="{{ asset('assets/themes/' ~ theme ~ '.css') }}">
+    {% endif %}
 </head>
 <body>
   <div

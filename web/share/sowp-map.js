@@ -124,7 +124,7 @@
     var icon = L.icon({
       iconUrl: icon_url,
       shadowUrl: icon_url,
-      iconSize: [40, 40],
+      iconSize: [24, 30],
       shadowSize: [0, 0]
     });
     this.icons[icon_url] = icon;
