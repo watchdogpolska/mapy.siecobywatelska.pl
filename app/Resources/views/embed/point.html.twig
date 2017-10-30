@@ -1,28 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ point }}</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-    <style>
-      html, body {
-        height: 100%;
-      }
-      body {
-        margin: 0;
-      }
-      .map-container{
-        height: 100%;
-        width: 100%;
-      }
-    </style>
-</head>
-<body>
-  <div
+{% extends "embed/base.html.twig" %}
+
+{% block content %}
+<div
     data-sowp-map
     data-sowp-point-url="{{ absolute_url(path('api_point_show', { id: point.id })) }}"
     class="map-container"></div>
-  <script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-  <script src="{{ asset('share/sowp-map.js') }}"></script>
-</body>
-</html>
+{% endblock %}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ map.title }}</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      margin: 0;
+    }
+    .map-container{
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+  {% block meta %}
+    <link rel="alternate" type="application/json+oembed"
+          href="{{ absolute_url(path('oembed_resolver', { url: app.request.uri, format: "json" })) }}"
+          title="Map oEmbed Profile" />
+    <link rel="alternate" type="text/xml+oembed"
+          href="{{ absolute_url(path('oembed_resolver', { url: app.request.uri, format: "xml" })) }}"
+          title="Map oEmbed Profile" />
+  {% endblock %}
+  {% if not theme is none %}
+    <link rel="stylesheet" href="{{ asset('assets/themes/' ~ theme ~ '.css') }}">
+  {% endif %}
+</head>
+<body>
+{% block content %}
+{% endblock %}
+<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+<script src="{{ asset('share/sowp-map.js') }}"></script>
+</body>
+</html>

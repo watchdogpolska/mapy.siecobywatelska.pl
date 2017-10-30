@@ -8,7 +8,15 @@
 
 namespace AppBundle\Entity\OEmbed;
 
+use JMS\Serializer\Annotation\XmlRoot;
 
+/**
+ * Class RichContent
+ * @package AppBundle\Entity\OEmbed
+ *
+ * @XmlRoot("oembed")
+ *
+ */
 class RichContent extends BaseOembed {
 
 

@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Map controller.
@@ -66,20 +67,39 @@ class EmbedController extends Controller
      * @Route("/oembed/", name="oembed_resolver")
      * @Method("GET")
      *
-     * @return JsonResponse
+     * @return Response
      */
     public function oembed(Request $request)
     {
         $url = $request->query->get('url');
+        $format = $request->query->get('format', 'json');
+
         if (!$url) {
             throw $this->createNotFoundException('You must provide url parameter.');
         }
 
-        $html = '<iframe="https://oembed.com/" width="300" height="400"></iframe>';
+        $html = $this->getTemplating()->render('embed/oembed.html.twig', array(
+            "url" => $url,
+            "width" => 640,
+            "height" => 360,
+        ));
 
         $entity = new RichContent($html, 300, 400);
-        $body = $this->get('serializer')->serialize($entity, 'json', null);
-        return new JsonResponse($body, 200, array(), true);
+        $body = $this->get('serializer')->serialize($entity, $format, null);
+
+        if ($format == "json"){
+            return new JsonResponse($body, 200, array(), true);
+        }
+        return new Response($body, 200, array(
+            'Content-Type' => "text/xml"
+        ));
+    }
+
+    /**
+     * @return object|\Symfony\Bundle\TwigBundle\TwigEngine
+     */
+    private function getTemplating() {
+        return $this->container->get( 'templating' );
     }
 
 }

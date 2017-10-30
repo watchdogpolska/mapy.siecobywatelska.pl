@@ -10,12 +10,15 @@ namespace AppBundle\Entity\OEmbed;
 
 
 use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\XmlRoot;
 
 /**
  * Class BaseOembed
  * @package AppBundle\Entity\OEmbed
  *
  * @ExclusionPolicy("none")
+ * @XmlRoot("oembed")
+ *
  */
 abstract class BaseOembed {
     private $type;
