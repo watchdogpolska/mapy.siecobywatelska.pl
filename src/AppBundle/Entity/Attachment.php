@@ -16,8 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     @ORM\Index(name="fk_attachment_fos_user1_idx", columns={"modifited_by"}),
  *     @ORM\Index(name="fk_attachment_fos_user2_idx", columns={"created_by"})
  * })
- * @Gedmo\Uploadable(path="upload/")
- * @ORM\Entity(repositoryClass="AppBundle\Entity\AttachmentRepository")
+ * @ORM\Entity()
  * @ExclusionPolicy("all")
  */
 class Attachment
@@ -34,47 +33,22 @@ class Attachment
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
      * @Serializer\Expose()
      */
     private $title;
 
     /**
-     * @var string
+     * @var \Application\Sonata\MediaBundle\Entity\Media
      *
-     * @Gedmo\UploadableFilePath
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
-     * @Assert\File(
-     *     mimeTypes={"image/jpeg", "image/pjpeg", "image/png", "image/x-png"}
-     * )
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", fetch="EAGER")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="icon_id", referencedColumnName="id")
+     * })
      * @Serializer\Expose()
-     */
-    private $path;
-
-    /**
-     * @var string
      *
-     * @Gedmo\UploadableFileName
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\UploadableFileMimeType
-     * @ORM\Column(name="mime_type", type="string", length=45, nullable=false)
-     */
-    private $mimeType;
-
-    /**
-     * @var string
-     *
-     * @Gedmo\UploadableFileSize
-     * @ORM\Column(name="size", type="decimal", precision=10, scale=0, nullable=false)
-     */
-    private $size;
-
+    private $file;
 
     /**
      * @var \AppBundle\Entity\Point
@@ -103,10 +77,10 @@ class Attachment
     private $modifitedAt;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      * })
@@ -114,10 +88,10 @@ class Attachment
     private $createdBy;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="modifited_by", referencedColumnName="id")
      * })
@@ -159,100 +133,19 @@ class Attachment
     }
 
     /**
-     * Set path
-     *
-     * @param string $path
-     *
-     * @return Attachment
+     * @return \Application\Sonata\MediaBundle\Entity\Media
      */
-    public function setPath($path)
-    {
-        $this->path = $path;
-
-        return $this;
+    public function getFile() {
+        return $this->file;
     }
 
     /**
-     * Get path
-     *
-     * @return string
+     * @param \Application\Sonata\MediaBundle\Entity\Media $file
      */
-    public function getPath()
-    {
-        return $this->path;
+    public function setFile(\Application\Sonata\MediaBundle\Entity\Media $file ) {
+        $this->file = $file;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Attachment
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set mimeType
-     *
-     * @param string $mimeType
-     *
-     * @return Attachment
-     */
-    public function setMimeType($mimeType)
-    {
-        $this->mimeType = $mimeType;
-
-        return $this;
-    }
-
-    /**
-     * Get mimeType
-     *
-     * @return string
-     */
-    public function getMimeType()
-    {
-        return $this->mimeType;
-    }
-
-    /**
-     * Set size
-     *
-     * @param string $size
-     *
-     * @return Attachment
-     */
-    public function setSize($size)
-    {
-        $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * Get size
-     *
-     * @return string
-     */
-    public function getSize()
-    {
-        return $this->size;
-    }
 
     /**
      * Set createdAt
@@ -329,11 +222,11 @@ class Attachment
     /**
      * Set createdBy
      *
-     * @param \AppBundle\Entity\User $createdBy
+     * @param \Application\Sonata\UserBundle\Entity\User $createdBy
      *
      * @return Attachment
      */
-    public function setCreatedBy(\AppBundle\Entity\User $createdBy = null)
+    public function setCreatedBy(\Application\Sonata\UserBundle\Entity\User $createdBy = null)
     {
         $this->createdBy = $createdBy;
 
@@ -343,7 +236,7 @@ class Attachment
     /**
      * Get createdBy
      *
-     * @return \AppBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getCreatedBy()
     {
@@ -353,11 +246,11 @@ class Attachment
     /**
      * Set modifitedBy
      *
-     * @param \AppBundle\Entity\User $modifitedBy
+     * @param \Application\Sonata\UserBundle\Entity\User $modifitedBy
      *
      * @return Attachment
      */
-    public function setModifitedBy(\AppBundle\Entity\User $modifitedBy = null)
+    public function setModifitedBy(\Application\Sonata\UserBundle\Entity\User $modifitedBy = null)
     {
         $this->modifitedBy = $modifitedBy;
 
@@ -367,7 +260,7 @@ class Attachment
     /**
      * Get modifitedBy
      *
-     * @return \AppBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getModifitedBy()
     {
@@ -376,6 +269,6 @@ class Attachment
 
     public function __toString()
     {
-        return $this->getTitle();
+        return $this->getTitle() != null ? $this->getTitle() : "";
     }
 }

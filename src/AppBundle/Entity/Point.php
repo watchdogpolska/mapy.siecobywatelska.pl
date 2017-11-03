@@ -15,8 +15,9 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *     @ORM\Index(name="fk_point_map_idx", columns={"map_id"}),
  *     @ORM\Index(name="fk_point_icon1_idx", columns={"icon_id"}),
  *     @ORM\Index(name="fk_point_fos_user1_idx", columns={"created_by"}),
- *     @ORM\Index(name="fk_point_fos_user2_idx", columns={"modifited_by"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\PointRepository")
+ *     @ORM\Index(name="fk_point_fos_user2_idx", columns={"modifited_by"})
+ * })
+ * @ORM\Entity()
  */
 class Point
 {
@@ -64,9 +65,9 @@ class Point
     private $lng;
 
     /**
-     * @var \AppBundle\Entity\Icon
+     * @var \Application\Sonata\MediaBundle\Entity\Media
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Icon", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\MediaBundle\Entity\Media", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="icon_id", referencedColumnName="id")
      * })
@@ -80,7 +81,7 @@ class Point
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Map", inversedBy="points")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="map_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="map_id", referencedColumnName="id", nullable=false)
      * })
      * @Serializer\Exclude()
      */
@@ -105,10 +106,10 @@ class Point
     private $modifitedAt;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      * })
@@ -117,10 +118,10 @@ class Point
     private $createdBy;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="modifited_by", referencedColumnName="id")
      * })
@@ -129,7 +130,7 @@ class Point
     private $modifitedBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attachment", mappedBy="point")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Attachment", mappedBy="point", cascade={"persist"})
      * @Serializer\Expose()
      * @Serializer\Groups({ "point.detail" })
      */
@@ -296,11 +297,11 @@ class Point
     /**
      * Set icon
      *
-     * @param \AppBundle\Entity\Icon $icon
+     * @param \Application\Sonata\MediaBundle\Entity\Media $icon
      *
      * @return Point
      */
-    public function setIcon(\AppBundle\Entity\Icon $icon = null)
+    public function setIcon(\Application\Sonata\MediaBundle\Entity\Media $icon = null)
     {
         $this->icon = $icon;
 
@@ -310,7 +311,7 @@ class Point
     /**
      * Get icon
      *
-     * @return \AppBundle\Entity\Icon
+     * @return \Application\Sonata\MediaBundle\Entity\Media
      */
     public function getIcon()
     {
@@ -344,11 +345,11 @@ class Point
     /**
      * Set createdBy
      *
-     * @param \AppBundle\Entity\User $createdBy
+     * @param \Application\Sonata\UserBundle\Entity\User $createdBy
      *
      * @return Point
      */
-    public function setCreatedBy(\AppBundle\Entity\User $createdBy = null)
+    public function setCreatedBy(\Application\Sonata\UserBundle\Entity\User $createdBy = null)
     {
         $this->createdBy = $createdBy;
 
@@ -358,7 +359,7 @@ class Point
     /**
      * Get createdBy
      *
-     * @return \AppBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getCreatedBy()
     {
@@ -368,11 +369,11 @@ class Point
     /**
      * Set modifitedBy
      *
-     * @param \AppBundle\Entity\User $modifitedBy
+     * @param \Application\Sonata\UserBundle\Entity\User $modifitedBy
      *
      * @return Point
      */
-    public function setModifitedBy(\AppBundle\Entity\User $modifitedBy = null)
+    public function setModifitedBy(\Application\Sonata\UserBundle\Entity\User $modifitedBy = null)
     {
         $this->modifitedBy = $modifitedBy;
 
@@ -382,7 +383,7 @@ class Point
     /**
      * Get modifitedBy
      *
-     * @return \AppBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getModifitedBy()
     {
@@ -399,7 +400,8 @@ class Point
     public function addAttachment(\AppBundle\Entity\Attachment $attachment)
     {
         $this->attachments[] = $attachment;
-
+        $attachment->setPoint($this);
+        
         return $this;
     }
 
@@ -411,6 +413,7 @@ class Point
     public function removeAttachment(\AppBundle\Entity\Attachment $attachment)
     {
         $this->attachments->removeElement($attachment);
+        $attachment->setPoint(null);
     }
 
     /**
@@ -440,6 +443,6 @@ class Point
 
     public function __toString()
     {
-        return $this->getTitle();
+        return $this->getTitle() != null ? $this->getTitle() : "";
     }
 }

@@ -76,15 +76,15 @@
             'div', null,
             [
               e('h1', null, [t(data.title)]),
-              e('p', null, [t(data.description)]),
+              e('p', null, [t(data.description || "")]),
               e('ul', null,
                 data.attachments.map(function(attachment){
                   return e(
                     'li', {},
                     [
                       e(
-                        'a', {'href': attachment.path},
-                        [t(attachment.title || attachment.name)]
+                        'a', {'href': attachment.file.url},
+                        [t(attachment.title || attachment.file.name)]
                       )
                     ]
                   )
@@ -102,7 +102,8 @@
   SowpMap.prototype.fetchMap = function(map_url) {
     ajax(map_url, (function(data) {
       data.points.forEach(function(item) {
-        var icon = this.getIconInstance(item.icon.url);
+        console.log(item);
+        var icon = this.getIconInstance(item.icon);
         this.addMarker(item.lat, item.lng, item._links._self, icon);
       }.bind(this));
     }).bind(this));
@@ -111,24 +112,27 @@
   SowpMap.prototype.fetchPoint = function(point_url) {
     ajax(point_url, (function(item) {
       console.log(item);
-      var icon = this.getIconInstance(item.icon.url);
+      var icon = this.getIconInstance(item.icon);
       this.addMarker(item.lat, item.lng, item._links._self, icon);
     }).bind(this));
   };
 
 
-  SowpMap.prototype.getIconInstance = function(icon_url){
-    if(this.icons[icon_url]){
-      return this.icons[icon_url];
+  SowpMap.prototype.getIconInstance = function(icon){
+    var iconUrl = icon.url.orig;
+    if(this.icons[iconUrl]){
+      return this.icons[iconUrl];
     }
+    var width = Math.min(50, icon.width);
+    var height = width * icon.height / icon.width;
+
     var icon = L.icon({
-      iconUrl: icon_url,
-      shadowUrl: icon_url,
-      iconSize: [24, 30],
+      iconUrl: iconUrl,
+      shadowUrl: iconUrl,
+      iconSize: [width, height],
       shadowSize: [0, 0]
     });
-    this.icons[icon_url] = icon;
-    console.log(icon);
+    this.icons[iconUrl] = icon;
     return icon;
   };
 

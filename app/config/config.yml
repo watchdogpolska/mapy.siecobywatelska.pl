@@ -39,6 +39,7 @@ twig:
     form_themes:
       - "bootstrap_3_horizontal_layout.html.twig"
       - 'TetranzSelect2EntityBundle:Form:fields.html.twig'
+      - 'form/lat_lng_type.html.twig'
 
 # Doctrine Configuration
 doctrine:
@@ -56,7 +57,8 @@ doctrine:
         #   2. Uncomment database_path in parameters.yml.dist
         #   3. Uncomment next line:
         #     path:     "%database_path%"
-
+        types:
+            json: Sonata\Doctrine\Types\JsonType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         naming_strategy: doctrine.orm.naming_strategy.underscore
@@ -85,7 +87,15 @@ fos_user:
         sender_name:    Siecobywatelska.pl
     db_driver: orm
     firewall_name: main
-    user_class: AppBundle\Entity\User
+    user_class: Application\Sonata\UserBundle\Entity\User
+
+    group:
+        group_class:   Sonata\UserBundle\Entity\BaseGroup
+        group_manager: sonata.user.orm.group_manager                    # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+
+    service:
+        user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
+
 
 jms_serializer:
     metadata:
@@ -93,3 +103,99 @@ jms_serializer:
             FOSUB:
                 namespace_prefix: "FOS\\UserBundle"
                 path: "%kernel.root_dir%/Resources/serializer/FOS"
+
+#sonata_user:
+#    security_acl: true
+#    manager_type: orm # can be orm or mongodb
+
+sonata_admin:
+    title: "Sieć Obywatelska Watchdog Polska"
+    options:
+        title_mode: single_text
+
+    dashboard:
+        blocks:
+            - class:    col-lg-3 col-xs-6          # twitter bootstrap responsive code
+              position: top                        # zone in the dashboard
+              type:     sonata.admin.block.stats   # block id
+              settings:
+                  code:  app.admin.map                 # admin code - service id
+                  icon:  fa-map                    # font awesome icon
+                  text:  Created maps
+                  color: bg-yellow                 # colors: bg-green, bg-red and bg-aqua
+            - class:    col-lg-3 col-xs-6          # twitter bootstrap responsive code
+              position: top                        # zone in the dashboard
+              type:     sonata.admin.block.stats   # block id
+              settings:
+                  code:  app.admin.point              # admin code - service id
+                  icon:  fa-map-pin                  # font awesome icon
+                  text:  Created points
+                  color: bg-green                 # colors: bg-green, bg-red and bg-aqua
+            - class:    col-lg-3 col-xs-6          # twitter bootstrap responsive code
+              position: top                        # zone in the dashboard
+              type:     sonata.admin.block.stats   # block id
+              settings:
+                  code:  app.admin.attachment        # admin code - service id
+                  icon:  fa-file                  # font awesome icon
+                  text:  Created attachments
+                  color: bg-aqua                 # colors: bg-green, bg-red and bg-aqua
+            - class:    col-lg-3 col-xs-6          # twitter bootstrap responsive code
+              position: top                        # zone in the dashboard
+              type:     sonata.admin.block.stats   # block id
+              settings:
+                  code:  sonata.user.admin.user  # admin code - service id
+                  icon:  fa-users                  # font awesome icon
+                  text:  Registered users
+                  color: bg-red                 # colors: bg-green, bg-red and bg-aqua
+            - type: sonata.admin.block.admin_list
+              position: left
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # enable the SonataAdminBundle block
+        sonata.admin.block.stats:
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+        sonata.user.block.menu:    # used to display the menu in profile pages
+        sonata.user.block.account: # used to display menu option (login option)
+        sonata.block.service.text: # used to if you plan to use Sonata user routes
+        sonata.block.text:
+        app.admin.block.iframe:
+
+sonata_media:
+    # if you don't use default namespace configuration
+    #class:
+    #    media: MyVendor\MediaBundle\Entity\Media
+    #    gallery: MyVendor\MediaBundle\Entity\Gallery
+    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr it is mandatory to choose one here
+    default_context: default # you need to set a context
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+                - sonata.media.provider.vimeo
+
+            formats:
+                small: { width: 100 , quality: 70}
+                big:   { width: 500 , quality: 70}
+
+        icon:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.image
+
+            formats:
+                small: { width: 100 , quality: 70}
+
+    cdn:
+        server:
+            path: /uploads/media # http://media.sonata-project.org/
+
+    filesystem:
+        local:
+            directory:  "%kernel.root_dir%/../web/uploads/media"
+            create:     false

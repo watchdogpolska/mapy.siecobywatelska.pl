@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Application\Sonata\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -17,7 +18,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
  *     @ORM\Index(name="fk_map_fos_user1_idx", columns={"modifited_by"}),
  *     @ORM\Index(name="fk_map_fos_user2_idx", columns={"created_by"})
  * })
- * @ORM\Entity(repositoryClass="AppBundle\Entity\MapRepository")
+ * @ORM\Entity()
  */
 class Map
 {
@@ -63,10 +64,10 @@ class Map
     private $modifitedAt;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="created_by", referencedColumnName="id")
      * })
@@ -74,10 +75,10 @@ class Map
     private $createdBy;
 
     /**
-     * @var \AppBundle\Entity\User
+     * @var \Application\Sonata\UserBundle\Entity\User
      *
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="modifited_by", referencedColumnName="id")
      * })
@@ -90,6 +91,7 @@ class Map
      * @Serializer\Groups("map.detail")
      */
     private $points;
+
     public function __construct() {
         $this->points = new ArrayCollection();
     }
@@ -203,11 +205,11 @@ class Map
     /**
      * Set createdBy
      *
-     * @param \AppBundle\Entity\User $createdBy
+     * @param \Application\Sonata\UserBundle\Entity\User $createdBy
      *
      * @return Map
      */
-    public function setCreatedBy(\AppBundle\Entity\User $createdBy = null)
+    public function setCreatedBy(\Application\Sonata\UserBundle\Entity\User  $createdBy = null)
     {
         $this->createdBy = $createdBy;
 
@@ -217,7 +219,7 @@ class Map
     /**
      * Get createdBy
      *
-     * @return \AppBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getCreatedBy()
     {
@@ -227,11 +229,11 @@ class Map
     /**
      * Set modifitedBy
      *
-     * @param \AppBundle\Entity\User $modifitedBy
+     * @param User $modifitedBy
      *
      * @return Map
      */
-    public function setModifitedBy(\AppBundle\Entity\User $modifitedBy = null)
+    public function setModifitedBy( User $modifitedBy = null)
     {
         $this->modifitedBy = $modifitedBy;
 
@@ -241,7 +243,7 @@ class Map
     /**
      * Get modifitedBy
      *
-     * @return \AppBundle\Entity\User
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
     public function getModifitedBy()
     {
@@ -284,6 +286,6 @@ class Map
 
     public function __toString()
     {
-        return $this->getTitle();
+        return $this->getTitle() != null ? $this->getTitle() : "";
     }
 }

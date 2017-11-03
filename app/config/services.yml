@@ -13,3 +13,69 @@ services:
       arguments: ['@router', '@request_stack']
       tags:
             - { name: jms_serializer.event_subscriber, class: AppBundle\Entity\Map }
+
+  app.admin.map:
+      class: AppBundle\Admin\MapAdmin
+      arguments: [~, AppBundle\Entity\Map, ~]
+      tags:
+          - name: sonata.admin
+            manager_type: orm
+            group: Cartography
+            label: Map
+      public: true
+      calls:
+          - method: addChild
+            arguments:
+                - '@app.admin.point'
+
+  app.admin.point:
+      class: AppBundle\Admin\PointAdmin
+      arguments: [~, AppBundle\Entity\Point, ~]
+      tags:
+          - name: sonata.admin
+            manager_type: orm
+            group: Cartography
+            label: Point
+      public: true
+
+
+  app.admin.attachment:
+      class: AppBundle\Admin\AttachmentAdmin
+      arguments: [~, AppBundle\Entity\Attachment, ~]
+      tags:
+          - name: sonata.admin
+            manager_type: orm
+            group: Cartography
+            label: Attachment
+      public: true
+
+  app.admin.block.iframe:
+      class: AppBundle\Block\Service\IframeBlockService
+      arguments:
+          - app.admin.block.iframe
+          - "@templating"
+      tags:
+          - { name: sonata.block }
+
+
+  app.admin.block_map:
+      class: AppBundle\EventListener\MapBlocksEventSubscriber
+      tags:
+        - { name: kernel.event_listener, event: sonata.block.event.sonata.admin.show.top, method: onBlock }
+      arguments: ['@router']
+
+  app.validator.app_route:
+      class: AppBundle\Validator\Constraints\AppRouteValidator
+      tags:
+          - { name: validator.constraint_validator, alias: app_route }
+      arguments: ['@request_stack', '@router']
+
+
+
+  app.serialization.media_handler:
+    class: AppBundle\Serializer\MediaSerializationHandler
+    tags:
+        - { name: jms_serializer.handler, type: Application\Sonata\MediaBundle\Entity\Media, direction: serialization, format: json, method: serializeMedia }
+    arguments:
+      - '@sonata.media.provider.image'
+      - '@sonata.media.provider.file'

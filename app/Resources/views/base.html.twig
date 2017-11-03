@@ -40,39 +40,14 @@
                             </button>
                         </div>
                         <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            {% if app.user %}
-                                <li>
-                                    <a href="{{ path('map_index') }}">
-                                        <i class="fa fa-map" aria-hidden="true"></i> Maps
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('point_index') }}">
-                                        <i class="fa fa-map-marker" aria-hidden="true"></i> Point
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('icon_index') }}">
-                                        <i class="fa fa-thumb-tack" aria-hidden="true"></i> Icoms
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('attachment_index') }}">
-                                        <i class="fa fa-file-word-o" aria-hidden="true"></i> Attachment
-                                    </a>
-                                </li>
-                            {% endif %}
-
-                        </ul>
                         <ul class="nav navbar-nav navbar-right">
                                 {% block header_navigation_links %}
 
                                     {% if is_granted('ROLE_ADMIN') %}
                                         <li>
-                                            {#<a href="{{ path('admin_post_index') }}">#}
-                                                {#<i class="fa fa-lock" aria-hidden="true"></i> {{ 'menu.admin'|trans }}#}
-                                            {#</a>#}
+                                            <a href="{{ path('sonata_admin_dashboard') }}">
+                                                <i class="fa fa-lock" aria-hidden="true"></i> Admin
+                                            </a>
                                         </li>
                                     {% endif %}
                                 {% endblock %}
@@ -103,17 +78,11 @@
                     <div id="main" class="col-sm-9">
                         {{ include('default/_flash_messages.html.twig') }}
 
-                        {% block main %}{% endblock %}
+                        {% block main %}
+                        {% endblock %}
                     </div>
 
                     <div id="sidebar" class="col-sm-3">
-                        {% block sidebar %}
-                            {# {{ render_esi(controller('FrameworkBundle:Template:template', {
-                                'template': 'blog/about.html.twig',
-                                'sharedAge': 600,
-                                '_locale': app.request.locale
-                            })) }} #}
-                        {% endblock %}
                     </div>
                 </div>
             {% endblock %}
@@ -125,7 +94,7 @@
                     <div class="row">
                         <div id="footer-copyright" class="col-md-6">
                             <p>&copy; {{ 'now'|date('Y') }} - Sieć Obywatelska Watchdog Polska</p>
-                            <p>{{ 'mit_license'|trans }}</p>
+
                         </div>
                         <div id="footer-resources" class="col-md-6">
                             <p>

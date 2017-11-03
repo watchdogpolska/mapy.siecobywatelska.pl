@@ -1,0 +1,35 @@
+.login-page, .register-page {
+  background: white;
+}
+.login-box, .login-box-body {
+  background: #F0F0F0;
+}
+.login-box {
+  position: relative;
+  padding: 30px;
+}
+.login-box:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: 20px solid white;
+  border-bottom-color: #808080;
+  border-left-color: #808080;
+}
+a {
+  color: #d72626;
+}
+a:hover, a:focus{
+  color: #d72626;
+  text-decoration: underline;
+}
+.btn-primary {
+  background: #d72626;
+  border: 1px solid #d72626;
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: #ac1e1e;
+  border: 1px solid #d72626;
+}

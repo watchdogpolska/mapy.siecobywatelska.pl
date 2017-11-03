@@ -31,7 +31,6 @@ class SerializerEventSubscriber implements EventSubscriberInterface
         return array(
             array('event' => Events::POST_SERIALIZE, 'method' => 'onMapPostSerialize', 'class' => Map::class, 'format' => 'json'),
             array('event' => Events::POST_SERIALIZE, 'method' => 'onPointPostSerialize', 'class' => Point::class, 'format' => 'json'),
-            array('event' => Events::POST_SERIALIZE, 'method' => 'onIconPostSerialize', 'class' => Icon::class, 'format' => 'json'),
         );
     }
 

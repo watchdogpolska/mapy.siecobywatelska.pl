@@ -22,7 +22,5 @@
 /web/bundles/
 
 # Uploaded files
-/web/icons/*
-!web/icons/.gitkeep
-/web/upload/*
-!web/upload/.gitkeep
+web/uploads/media/
+!web/uploads/.gitkeep

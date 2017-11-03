@@ -12,6 +12,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Map;
 use AppBundle\Entity\OEmbed\RichContent;
 use AppBundle\Entity\Point;
+use AppBundle\Form\OembedType;
+use AppBundle\FormData\OembedResolverFormData;
 use AppBundle\Themes;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -49,13 +51,20 @@ class EmbedController extends Controller
     /**
      * Display point on map as embed.
      *
-     * @Route("/embed/point/{id}/", name="embed_point_slug")
+     * @Route("/embed/point/{id}/", name="embed_point_id")
      * @Method("GET")
      */
-    public function pointDetailAction(Point $point)
+    public function pointDetailAction(Point $point, Request $request)
     {
+        $theme = $request->query->get('theme', null);
+
+        if (!in_array($theme, array_keys(Themes::THEMES))) {
+            $theme = null;
+        }
+
         return $this->render('embed/point.html.twig', [
-            'point' => $point
+            'point' => $point,
+            'theme' => $theme
         ]);
     }
 
@@ -71,32 +80,38 @@ class EmbedController extends Controller
      */
     public function oembed(Request $request)
     {
-        $url = $request->query->get('url');
-        $format = $request->query->get('format', 'json');
+        $form = $this->createForm(OembedType::class, new OembedResolverFormData());
 
-        if (!$url) {
-            throw $this->createNotFoundException('You must provide url parameter.');
+        $form->submit( array(
+            'url' => $request->query->get('url'),
+            'format' => $request->query->get('format')
+        ));
+        if (!$form->isValid()) {
+            throw $this->createNotFoundException();
         }
 
+        /** @var OembedResolverFormData $formData */
+        $formData = $form->getData();
+
         $html = $this->getTemplating()->render('embed/oembed.html.twig', array(
-            "url" => $url,
+            "url" => $formData->getUrl(),
             "width" => 640,
             "height" => 360,
         ));
 
-        $entity = new RichContent($html, 300, 400);
-        $body = $this->get('serializer')->serialize($entity, $format, null);
+        $entity = new RichContent($html, 640, 360);
 
-        if ($format == "json"){
-            return new JsonResponse($body, 200, array(), true);
-        }
+        $format = $formData->getFormat();
+
+        $body = $this->get('serializer')->serialize($entity, $format, null);
+        $contentType = $format == 'json' ? 'application/json' : "text/xml";
         return new Response($body, 200, array(
-            'Content-Type' => "text/xml"
+            'Content-Type' => $contentType
         ));
     }
 
     /**
-     * @return object|\Symfony\Bundle\TwigBundle\TwigEngine
+     * @return \Symfony\Bundle\TwigBundle\TwigEngine
      */
     private function getTemplating() {
         return $this->container->get( 'templating' );
