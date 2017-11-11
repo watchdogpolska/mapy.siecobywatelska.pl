@@ -54,6 +54,10 @@ class AppKernel extends Kernel
             }
         }
 
+        if($this->getEnvironment() == 'prod') {
+            $bundles[] = new Sentry\SentryBundle\SentryBundle();
+        }
+
         return $bundles;
     }
 

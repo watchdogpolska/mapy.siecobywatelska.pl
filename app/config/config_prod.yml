@@ -19,3 +19,6 @@ monolog:
             level: debug
         console:
             type:  console
+
+sentry:
+    dsn: "%sentry_dsn%"
